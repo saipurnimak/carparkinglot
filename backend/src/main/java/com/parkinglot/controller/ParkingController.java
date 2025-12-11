@@ -28,14 +28,20 @@ public class ParkingController {
         return ResponseEntity.ok(spots);
     }
     
-    @PostMapping("/parking")
+    @PostMapping("/parking/park")
     public ResponseEntity<?> parkCar(@Valid @RequestBody ParkingRequest request, Authentication authentication) {
         try {
             String email = authentication.getName();
             ParkingSessionDTO session = parkingService.parkCar(email, request);
             return ResponseEntity.status(HttpStatus.CREATED).body(session);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
+            HttpStatus status = HttpStatus.CONFLICT;
+            if (e.getMessage().equals("NO_SPOTS_AVAILABLE")) {
+                status = HttpStatus.SERVICE_UNAVAILABLE;
+            } else if (e.getMessage().equals("Car not found")) {
+                status = HttpStatus.NOT_FOUND;
+            }
+            return ResponseEntity.status(status)
                     .body(new ErrorResponse(e.getMessage(), "Unable to park car"));
         }
     }

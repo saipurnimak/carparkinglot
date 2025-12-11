@@ -56,6 +56,26 @@ function ParkCar() {
     }
   };
 
+  const handleAutoPark = async () => {
+    if (!selectedCar) {
+      setError('Please select a car first');
+      return;
+    }
+
+    setError('');
+    setSuccess('');
+
+    try {
+      await parkingAPI.parkCar({
+        carId: parseInt(selectedCar),
+      });
+      setSuccess('Car parked automatically in the best available spot!');
+      setTimeout(() => navigate('/active'), 2000);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Error parking car');
+    }
+  };
+
   const floors = [1, 2, 3];
 
   return (
@@ -78,6 +98,20 @@ function ParkCar() {
           </select>
         </div>
 
+        {selectedCar && (
+          <button 
+            className="btn btn-primary" 
+            onClick={handleAutoPark}
+            style={{ marginTop: '1rem' }}
+          >
+            Auto-Park (Let System Choose Best Spot)
+          </button>
+        )}
+      </div>
+
+      <h2 style={{ marginTop: '2rem' }}>Or Choose Your Spot Manually</h2>
+
+      <div className="card">
         <div className="form-group">
           <label>Filter by Floor</label>
           <select value={selectedFloor} onChange={(e) => setSelectedFloor(e.target.value)}>

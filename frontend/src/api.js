@@ -33,7 +33,7 @@ export const parkingAPI = {
     const params = floor ? { floor } : {};
     return api.get('/spots/available', { params });
   },
-  parkCar: (data) => api.post('/parking', data),
+  parkCar: (data) => api.post('/parking/park', data),
   getActiveSessions: () => api.get('/parking/active'),
   leaveParkingSpot: (sessionId) => api.post(`/parking/${sessionId}/leave`),
 };

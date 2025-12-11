@@ -13,9 +13,9 @@ public class ParkingRequest {
     @NotNull(message = "Car ID is required")
     private Long carId;
     
-    @NotNull(message = "Floor is required")
+    // Optional: if not provided, system will auto-assign available spot
     private Integer floor;
     
-    @NotNull(message = "Spot number is required")
+    // Optional: if not provided, system will auto-assign available spot
     private Integer spotNumber;
 }

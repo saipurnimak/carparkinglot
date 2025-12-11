@@ -42,13 +42,32 @@ public class ParkingService {
         Car car = carRepository.findByIdAndUser(request.getCarId(), user)
                 .orElseThrow(() -> new RuntimeException("Car not found"));
         
-        // Find parking spot
-        ParkingSpot spot = parkingSpotRepository.findByFloorAndSpotNumber(request.getFloor(), request.getSpotNumber())
-                .orElseThrow(() -> new RuntimeException("Parking spot not found"));
+        // Check if car is already parked
+        if (parkingSessionRepository.existsByCarAndActive(car, true)) {
+            throw new RuntimeException("CAR_ALREADY_PARKED");
+        }
         
-        // Check if spot is already occupied
-        if (spot.getOccupied()) {
-            throw new RuntimeException("SPOT_ALREADY_OCCUPIED");
+        ParkingSpot spot;
+        
+        // Auto-assign spot if floor/spotNumber not provided
+        if (request.getFloor() == null || request.getSpotNumber() == null) {
+            // Find first available spot (prefer lower floors)
+            spot = parkingSpotRepository.findByOccupied(false).stream()
+                    .sorted((s1, s2) -> {
+                        int floorCompare = Integer.compare(s1.getFloor(), s2.getFloor());
+                        return floorCompare != 0 ? floorCompare : Integer.compare(s1.getSpotNumber(), s2.getSpotNumber());
+                    })
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("NO_SPOTS_AVAILABLE"));
+        } else {
+            // Find specific spot
+            spot = parkingSpotRepository.findByFloorAndSpotNumber(request.getFloor(), request.getSpotNumber())
+                    .orElseThrow(() -> new RuntimeException("Parking spot not found"));
+            
+            // Check if spot is already occupied
+            if (spot.getOccupied()) {
+                throw new RuntimeException("SPOT_ALREADY_OCCUPIED");
+            }
         }
         
         // Create parking session

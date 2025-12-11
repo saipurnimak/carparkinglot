@@ -4,6 +4,7 @@
 /Users/purnimasrikanth/Desktop/parkinglot-Java/backend/src/main/java/com/parkinglot/security/CustomUserDetailsService.java
 /Users/purnimasrikanth/Desktop/parkinglot-Java/backend/src/main/java/com/parkinglot/service/CarService.java
 /Users/purnimasrikanth/Desktop/parkinglot-Java/backend/src/main/java/com/parkinglot/dto/ParkingSpotDTO.java
+/Users/purnimasrikanth/Desktop/parkinglot-Java/backend/src/main/java/com/parkinglot/config/OpenApiConfig.java
 /Users/purnimasrikanth/Desktop/parkinglot-Java/backend/src/main/java/com/parkinglot/dto/ParkingRequest.java
 /Users/purnimasrikanth/Desktop/parkinglot-Java/backend/src/main/java/com/parkinglot/dto/AuthResponse.java
 /Users/purnimasrikanth/Desktop/parkinglot-Java/backend/src/main/java/com/parkinglot/controller/AuthController.java

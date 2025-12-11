@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "parking_spots")
+@Table(name = "parking_spots", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"floor", "spotNumber"})
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +21,7 @@ public class ParkingSpot {
     @Column(nullable = false)
     private Integer floor;
     
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private Integer spotNumber;
     
     @Column(nullable = false)
